@@ -21,16 +21,6 @@ $ pip3 install -r requirements.txt
 
 <br />
 
-> Alternative Install if above fail
-
-```bash
-$ python -m venv env
-$ ./env/bin/activate
-$ pip install -r requirements.txt
-```
-
-<br />
-
 
 > Set Up Flask Environment
 
@@ -62,6 +52,17 @@ $ pip3 install -r requirements.txt
 ```
 
 <br />
+
+> Alternative Install if above fail
+
+```bash
+$ python -m venv env
+$ ./env/bin/activate
+$ pip install -r requirements.txt
+```
+
+<br />
+
 
 > Set Up Flask Environment
 
