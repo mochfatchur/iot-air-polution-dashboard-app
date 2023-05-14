@@ -57,7 +57,7 @@ $ pip3 install -r requirements.txt
 
 ```bash
 $ python -m venv env
-$ ./env/bin/activate
+$ ./env/Scripts/activate
 $ pip install -r requirements.txt
 ```
 
