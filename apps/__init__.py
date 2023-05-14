@@ -11,8 +11,12 @@ from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
 
 
+
+# db sqlite3
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+
 
 
 def register_extensions(app):

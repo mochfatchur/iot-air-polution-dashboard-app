@@ -10,6 +10,10 @@ from flask_login import (
     logout_user
 )
 
+# for rds
+from flask import jsonify
+import pymysql.cursors
+
 from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
@@ -121,3 +125,36 @@ def not_found_error(error):
 @blueprint.errorhandler(500)
 def internal_error(error):
     return render_template('home/page-500.html'), 500
+
+# aws rds
+# Define a route for retrieving data from the database
+@blueprint.route('/data')
+def get_data():
+    # Connect to the database
+    connection = pymysql.connect(
+        host='awseb-e-mb89cnnti3-stack-awsebrdsdatabase-odsswowpmrqh.csmyswtkxubb.ap-southeast-3.rds.amazonaws.com',
+        port=3306,
+        user='admin',
+        password='admin123',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+
+    # Retrieve data from the database
+    with connection.cursor() as cursor:
+        sql1 = "use mq135;"
+        cursor.execute(sql1)
+        sql2 = '''select * from mq135_data where id_esp32 = 2;'''
+        cursor.execute(sql2)
+        result = cursor.fetchall()
+
+    # Convert data to a list of dictionaries (for easy JSON serialization)
+    data = result
+    # for row in result:
+    #     data.append({
+    #         'id': row[0],
+    #         'month': row[1],
+    #         'day': row[2]
+    #     })
+
+    # Return data as JSON
+    return jsonify(data)
