@@ -1,5 +1,8 @@
 'use strict';
-setTimeout(function() {
+setTimeout(async function() {
+    // data iot
+    const datas = (await fetch('/data')).json();
+    console.log("ini :",datas);
     (function () {
         var options = {
             chart: {
