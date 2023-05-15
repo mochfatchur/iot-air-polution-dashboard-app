@@ -1,8 +1,34 @@
 'use strict';
 setTimeout(async function() {
     // data iot
-    const datas = (await fetch('/data')).json();
-    console.log("ini :",datas);
+    const response = await fetch('/data');
+    const datas = await response.json();
+    
+    // filter datas
+    // times in format hour : minute
+    const timesData = datas.map(data => {
+        const { hour, minute } = data;
+        const clockFormat = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        return clockFormat;        
+    });
+    // console.log('times:',timesData);
+
+    // dates
+    const dateTimeFormats = datas.map(data => {
+        const { day, hour, minute, month } = data;
+        const year = new Date().getFullYear();
+        const dateTimeFormat = `${day.toString().padStart(2, '0')}-${month}-${year} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        return dateTimeFormat;
+    });
+    // console.log('dates:',dateTimeFormats);
+    // values
+    const values = datas.map(data => {
+        const { value } = data;
+        return value;
+    });
+    // console.log('val:',values);
+
+    // charts
     (function () {
         var options = {
             chart: {
@@ -27,11 +53,11 @@ setTimeout(async function() {
                 },
             },
             series: [{
-                name: "Desktops",
-                data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                name: "ppm",
+                data: values
             }],
             title: {
-                text: 'Product Trends by Month',
+                text: 'Gases Concentration Trends by times',
                 align: 'left'
             },
             grid: {
@@ -41,7 +67,7 @@ setTimeout(async function() {
                 },
             },
             xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                categories: dateTimeFormats,
             }
         }
         var chart = new ApexCharts(
