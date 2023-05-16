@@ -16,8 +16,11 @@ from importlib import import_module
 db = SQLAlchemy()
 login_manager = LoginManager()
 
-
-
+# model prediction
+import pickle
+dir = os.path.abspath(os.path.dirname(__file__))
+model_1 = pickle.load(open(os.path.join(dir, 'model_esp_id_1.pkl'), "rb"))
+model_2 = pickle.load(open(os.path.join(dir, 'model_esp_id_2.pkl'), "rb"))
 
 def register_extensions(app):
     db.init_app(app)

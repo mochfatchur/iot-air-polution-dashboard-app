@@ -2,7 +2,7 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-
+import requests
 from flask import render_template, redirect, request, url_for
 from flask_login import (
     current_user,
@@ -10,10 +10,12 @@ from flask_login import (
     logout_user
 )
 
-# for rds
+# AWS rds
 from flask import jsonify
 import pymysql.cursors
 
+
+#  authentication
 from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
@@ -130,6 +132,37 @@ def internal_error(error):
 # Define a route for retrieving data from the database
 @blueprint.route('/data')
 def get_data():
+    # Connect to the database
+    connection = pymysql.connect(
+        host='awseb-e-mb89cnnti3-stack-awsebrdsdatabase-odsswowpmrqh.csmyswtkxubb.ap-southeast-3.rds.amazonaws.com',
+        port=3306,
+        user='admin',
+        password='admin123',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+
+    # Retrieve data from the database
+    with connection.cursor() as cursor:
+        sql1 = "use mq135;"
+        cursor.execute(sql1)
+        sql2 = '''select * from mq135_data where id_esp32 = 1;'''
+        cursor.execute(sql2)
+        result = cursor.fetchall()
+
+    # Convert data to a list of dictionaries (for easy JSON serialization)
+    data = result
+    # for row in result:
+    #     data.append({
+    #         'id': row[0],
+    #         'month': row[1],
+    #         'day': row[2]
+    #     })
+
+    # Return data as JSON
+    return jsonify(data)
+
+@blueprint.route('/datadua')
+def get_data2():
     # Connect to the database
     connection = pymysql.connect(
         host='awseb-e-mb89cnnti3-stack-awsebrdsdatabase-odsswowpmrqh.csmyswtkxubb.ap-southeast-3.rds.amazonaws.com',

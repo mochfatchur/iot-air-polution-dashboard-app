@@ -1,8 +1,10 @@
 'use strict';
 setTimeout(async function() {
+    // ESP 1
     // data iot
     const response = await fetch('/data');
     const datas = await response.json();
+    
     
     // filter datas
     // times in format hour : minute
@@ -27,7 +29,37 @@ setTimeout(async function() {
         return value;
     });
     // console.log('val:',values);
+    
+    // ESP 1
+    // data iot
+    const response2 = await fetch('/datadua');
+    const datas2 = await response2.json();
+    
+    
+    // filter datas
+    // times in format hour : minute
+    const timesData2 = datas2.map(data => {
+        const { hour, minute } = data;
+        const clockFormat = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        return clockFormat;        
+    });
+    // console.log('times:',timesData);
 
+    // dates
+    const dateTimeFormats2 = datas2.map(data => {
+        const { day, hour, minute, month } = data;
+        const year = new Date().getFullYear();
+        const dateTimeFormat = `${day.toString().padStart(2, '0')}-${month}-${year} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        return dateTimeFormat;
+    });
+    // console.log('dates:',dateTimeFormats);
+    // values
+    const values2 = datas2.map(data => {
+        const { value } = data;
+        return value;
+    });
+    // console.log('val:',values);
+    
     // charts
     (function () {
         var options = {
@@ -53,7 +85,7 @@ setTimeout(async function() {
                 },
             },
             series: [{
-                name: "ppm",
+                name: "Analog value",
                 data: values
             }],
             title: {
@@ -79,255 +111,46 @@ setTimeout(async function() {
     (function () {
         var options = {
             chart: {
-                height: 350,
-                type: 'area',
+                height: 300,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                }
             },
             dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            colors: ["#FFB64D", "#FF5370"],
-            series: [{
-                name: 'series1',
-                data: [31, 40, 28, 51, 42, 109, 100]
-            }, {
-                name: 'series2',
-                data: [11, 32, 45, 32, 34, 52, 41]
-            }],
-
-            xaxis: {
-                type: 'datetime',
-                categories: ["2018-09-19T00:00:00", "2018-09-19T01:30:00", "2018-09-19T02:30:00", "2018-09-19T03:30:00", "2018-09-19T04:30:00", "2018-09-19T05:30:00", "2018-09-19T06:30:00"],
-            },
-            tooltip: {
-                x: {
-                    format: 'dd/MM/yy HH:mm'
-                },
-            }
-        }
-
-        var chart = new ApexCharts(
-            document.querySelector("#area-chart-1"),
-            options
-        );
-
-        chart.render();
-    })();
-    (function () {
-        var options = {
-            chart: {
-                height: 350,
-                type: 'bar',
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            colors: ["#0e9e4a", "#4099ff", "#FF5370"],
-            stroke: {
-                show: true,
+                enabled: false,
                 width: 2,
-                colors: ['transparent']
             },
+            stroke: {
+                curve: 'straight',
+            },
+            colors: ["#4099ff"],
             fill: {
-                type: 'gradient',
+                type: "gradient",
                 gradient: {
-                    shade: 'light',
-                    type: "vertical",
-                    shadeIntensity: 0.25,
-                    inverseColors: true,
-                    opacityFrom: 1,
-                    opacityTo: 0.7,
-                    stops: [50, 100]
+                    shade: 'light'
                 },
             },
             series: [{
-                name: 'Net Profit',
-                data: [44, 55, 57, 56, 61, 58, 63]
-            }, {
-                name: 'Revenue',
-                data: [76, 85, 101, 98, 87, 105, 91]
-            }, {
-                name: 'Free Cash Flow',
-                data: [35, 41, 36, 26, 45, 48, 52]
+                name: "Analog value",
+                data: values2
             }],
+            title: {
+                text: 'Gases Concentration Trends by times',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f6ff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
             xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-            },
-            yaxis: {
-                title: {
-                    text: '$ (thousands)'
-                }
-            },
-            tooltip: {
-                y: {
-                    formatter: function(val) {
-                        return "$ " + val + " thousands"
-                    }
-                }
+                categories: dateTimeFormats2,
             }
         }
         var chart = new ApexCharts(
-            document.querySelector("#bar-chart-1"),
-            options
-        );
-        chart.render();
-    })();
-    (function () {
-        var options = {
-            chart: {
-                height: 350,
-                type: 'bar',
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: true,
-                    dataLabels: {
-                        position: 'top',
-                    },
-                }
-            },
-            colors: ["#4099ff", "#0e9e4a"],
-            dataLabels: {
-                enabled: true,
-                offsetX: -6,
-                style: {
-                    fontSize: '12px',
-                    colors: ['#fff']
-                }
-            },
-            stroke: {
-                show: true,
-                width: 1,
-                colors: ['#fff']
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shade: 'light',
-                    type: "horizontal",
-                    shadeIntensity: 0.25,
-                    inverseColors: true,
-                    opacityFrom: 0.8,
-                    opacityTo: 1,
-                    stops: [0, 100]
-                },
-            },
-            series: [{
-                data: [44, 55, 41, 64, 22, 43, 21]
-            }, {
-                data: [53, 32, 33, 52, 13, 44, 32]
-            }],
-            xaxis: {
-                categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
-            },
-        }
-        var chart = new ApexCharts(
-            document.querySelector("#bar-chart-3"),
-            options
-        );
-        chart.render();
-    })();
-    (function () {
-        var options = {
-            chart: {
-                height: 320,
-                type: 'pie',
-            },
-            labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-            series: [44, 55, 13, 43, 22],
-            colors: ["#4099ff", "#0e9e4a", "#00bcd4", "#FFB64D", "#FF5370"],
-            legend: {
-                show: true,
-                position: 'bottom',
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shade: 'light',
-                    inverseColors: true,
-                }
-            },
-            dataLabels: {
-                enabled: true,
-                dropShadow: {
-                    enabled: false,
-                }
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }]
-        }
-        var chart = new ApexCharts(
-            document.querySelector("#pie-chart-1"),
-            options
-        );
-        chart.render();
-    })();
-    (function () {
-        var options = {
-            chart: {
-                height: 320,
-                type: 'donut',
-            },
-            series: [44, 55, 41, 17, 15],
-            colors: ["#4099ff", "#0e9e4a", "#00bcd4", "#FFB64D", "#FF5370"],
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shade: 'light',
-                    inverseColors: true,
-                }
-            },
-            legend: {
-                show: true,
-                position: 'bottom',
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        labels: {
-                            show: true,
-                            name: {
-                                show: true
-                            },
-                            value: {
-                                show: true
-                            }
-                        }
-                    }
-                }
-            },
-            dataLabels: {
-                enabled: true,
-                dropShadow: {
-                    enabled: false,
-                }
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }]
-        }
-        var chart = new ApexCharts(
-            document.querySelector("#pie-chart-2"),
+            document.querySelector("#line-chart-2"),
             options
         );
         chart.render();

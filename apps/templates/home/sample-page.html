@@ -50,10 +50,23 @@
 							</div>
 						</div>
 						<div class="card-body">
-							<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-								aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-								officia deserunt mollit anim id est laborum."
-							</p>
+							<h5>Prediction Results</h5>
+							<table>
+								<thead>
+									<tr>
+										<th>Hour</th>
+										<th>Prediction</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for result in results %}
+									<tr>
+										<td>{{ result.hour }}</td>
+										<td>{{ result.prediction }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
